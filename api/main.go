@@ -33,5 +33,9 @@ func main() {
 
 	setupRoutes(app)
 
-	log.Fatal(app.Listen(os.Getenv("PORT")))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
+	log.Fatal(app.Listen(":" + port))
 }
