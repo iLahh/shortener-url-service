@@ -34,11 +34,7 @@ func ResolveURL(c *fiber.Ctx) error {
 		})
 	}
 
-	rInr := database.CreateClient(1)
-	defer rInr.Close()
-
-	_ = rInr.Incr(database.Ctx, "counter")
-
+	// Increment click count in PostgreSQL per short code
 	database.DB.Exec(
 		"UPDATE urls SET click_count = click_count + 1 WHERE short_code = $1", url,
 	)

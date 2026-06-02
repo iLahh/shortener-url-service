@@ -44,8 +44,8 @@ func ShortenURL(c *fiber.Ctx) error {
 			quota = "10"
 		}
 		_ = r2.Set(database.Ctx, c.IP(), quota, 30*60*time.Second).Err()
-	} else {
-		val, _ = r2.Get(database.Ctx, c.IP()).Result()
+		val = quota
+	} else if err == nil {
 		valInt, _ := strconv.Atoi(val)
 		if valInt <= 0 {
 			limit, _ := r2.TTL(database.Ctx, c.IP()).Result()
@@ -80,13 +80,15 @@ func ShortenURL(c *fiber.Ctx) error {
 	r := database.CreateClient(0)
 	defer r.Close()
 
-	val, _ = r.Get(database.Ctx, id).Result()
-	if val != "" {
+	// Check if alias already exists in Redis
+	existingVal, _ := r.Get(database.Ctx, id).Result()
+	if existingVal != "" {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
 			"error": "URL custom short is already in use",
 		})
 	}
 
+	// Check if alias already exists in PostgreSQL
 	var existingURL string
 	err = database.DB.QueryRow(
 		"SELECT long_url FROM urls WHERE short_code = $1", id,

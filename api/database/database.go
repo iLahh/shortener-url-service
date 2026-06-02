@@ -15,7 +15,7 @@ func CreateClient(dbNo int) *redis.Client {
 		Addr:      os.Getenv("DB_ADDR"),
 		Password:  os.Getenv("DB_PASS"),
 		DB:        dbNo,
-		TLSConfig: &tls.Config{},
+		TLSConfig: &tls.Config{InsecureSkipVerify: false},
 	})
 	return rdb
 }
