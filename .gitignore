@@ -1,0 +1,45 @@
+# ============================================
+# .gitignore untuk Golang URL Shortener Service
+# ============================================
+
+# ----- Environment & Secrets -----
+.env
+.env.*
+!.env.example        # boleh commit file contoh env
+
+# ----- Binary & Build Output -----
+main
+api/main
+*.exe
+*.out
+*.test
+
+# ----- Go specific -----
+vendor/
+*.sum.bak
+
+# ----- Redis data -----
+.data/
+*.rdb
+
+# ----- PostgreSQL data -----
+pgdata/
+
+# ----- Docker -----
+.dockerignore
+
+# ----- IDE & Editor -----
+.vscode/
+.idea/
+*.swp
+*.swo
+*.DS_Store
+Thumbs.db
+
+# ----- Logs -----
+*.log
+logs/
+
+# ----- OS -----
+.DS_Store
+desktop.ini
